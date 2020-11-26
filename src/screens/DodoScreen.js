@@ -39,7 +39,7 @@ export default class DododScreen extends Component {
     }
 
     componentDidMount(){
-      this.getRestaurants()
+      this.getRestaurants(this.state.city)
   }
     show = () => {
     
@@ -60,14 +60,14 @@ export default class DododScreen extends Component {
           }}
         >
             <TouchableHighlight
-                  onPress={() =>  this.setState({city:'Санкт-Петербург'}, this.hide(), this.getRestaurants())}
+                  onPress={() =>  this.setState({city:'Санкт-Петербург'}, this.hide(), this.getRestaurants('Санкт-Петербург'))}
                   style={{backgroundColor:'#ff5a00', marginVertical: 10, height: windowHeight/20, width:windowWidth, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end',alignItems:'center', justifyContent:'center' }}
                 >   
                     <Text style = {{fontSize: 15, color: "#fff"}}>Санкт-Петербург</Text>
             </TouchableHighlight>
             <View></View>
             <TouchableHighlight
-                  onPress={() => this.setState({city:'Москва'}, this.hide())}
+                  onPress={() => this.setState({city:'Москва'}, this.hide(),this.getRestaurants('Москва'))}
                   style={{backgroundColor:'#ff5a00', marginVertical: 10, height: windowHeight/20, width:windowWidth, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end', alignItems:'center', justifyContent:'center' }}
                 >   
                     <Text style = {{fontSize: 15, color: "#fff"}}>Москва</Text>
@@ -77,9 +77,9 @@ export default class DododScreen extends Component {
       );
 
       
-      getRestaurants(){
+      getRestaurants(city){
 
-        const url_rest = "http://95.181.230.223:5000/dodo/restaurants/" + this.state.city
+        const url_rest = "http://95.181.230.223:5000/dodo/restaurants/" + city
         console.log(url_rest)
 
         return(

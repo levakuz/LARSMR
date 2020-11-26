@@ -35,7 +35,8 @@ export default class DodoOrderScrenn extends Component {
         
         this.state = {
         order:'',
-        dataOrder:[]
+        dataOrder:[],
+        status:''
         
       
         }
@@ -53,12 +54,16 @@ export default class DodoOrderScrenn extends Component {
                 alert('Извините, такого заказа не существует')
             }
             else{
+                console.log(JSON.parse(responseJson)['status'])
                 this.setState({
                 isLoading: false,
-                dataOrder:responseJson
+                dataOrder:responseJson,
+                status: JSON.parse(responseJson)['status']
                 });
                 try {
+                    console.log(this.state.status)
                     AsyncStorage.setItem('order', this.state.order.toString())
+                    AsyncStorage.setItem('status', this.state.status.toString())
                 } catch (error) {
                     console.log(error)
                 }

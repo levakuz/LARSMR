@@ -34,6 +34,7 @@ export default class FranchiseScreen extends Component {
         return(
             
             <View>
+            <StatusBar backgroundColor="#212021"  />
             <ScrollView>
             <TouchableOpacity  onPress={() => { this.props.navigation.navigate('Додо Пицца')}}>
               <View >
