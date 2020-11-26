@@ -32,8 +32,8 @@ export default class FranchiseScreen extends Component {
     }
     render(){
         return(
-            <View style={{flex:1}}>
-            <View style={{ flex:0.99}}>
+            
+            <View>
             <ScrollView>
             <TouchableOpacity  onPress={() => { this.props.navigation.navigate('Додо Пицца')}}>
               <View >
@@ -69,10 +69,7 @@ export default class FranchiseScreen extends Component {
             <View style={{width:windowWidth, height:windowHeight/20, backgroundColor: "#212021"}}/>
             
             </ScrollView>
-            </View>
-                <View style={{alignSelf:'flex-end'}}>
-                    <Image resizeMode={"cover"} style={{width:windowWidth,height:windowHeight/7}} source={{uri:"http://robotics.nw.ru/bitrix/templates/empty/images/labs/lars_slider_1.png"}}></Image>
-                </View>
+
             </View>
 
 

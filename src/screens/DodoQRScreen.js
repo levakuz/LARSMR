@@ -32,12 +32,21 @@ export default class DododScreenQR extends Component {
         this.sheetRef = React.createRef(null);
         
         this.state = {
-        dataRestaurant:[],
+        order:'',
         city : 'Санкт-Петербург',
       
         }
     }
-
+    componentDidMount(){
+      const storage = async()=>{
+        let items = await AsyncStorage.getItem('order');
+        console.log(items)
+        this.setState({order: items})
+      }
+      storage()
+      console.log(this.state.order)
+      
+  }
     render(){
         
           
@@ -48,7 +57,7 @@ export default class DododScreenQR extends Component {
             <Text style={{fontSize:20, margin:10}}>Ваш заказ №: </Text>
             <View style={{alignItems:'center'}}>
               <View style={{alignItems:'center',borderWidth:5, borderRadius:10, alignItems:'center', justifyContent:'center', width: windowWidth/2}}>
-                <Text style={{fontSize:20, textAlign:'center'}}></Text>
+                <Text style={{fontSize:20, textAlign:'center'}}>{this.state.order}</Text>
               </View>
             </View>
             <Text style={{fontSize:20, textAlign:'center', margin:5}}>Пожалуйста, отсканируйте QR код, который находится на столе.</Text>

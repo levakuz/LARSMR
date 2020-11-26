@@ -31,14 +31,16 @@ export default class DododScreen extends Component {
         this.sheetRef = React.createRef(null);
         
         this.state = {
+        isLoading: true,
         dataRestaurant:[],
         city : 'Санкт-Петербург',
       
         }
     }
 
-    ComponentDidMount(){
-    }
+    componentDidMount(){
+      this.getRestaurants()
+  }
     show = () => {
     
         this.sheetRef.current && this.sheetRef.current.snapTo(0);
@@ -58,7 +60,7 @@ export default class DododScreen extends Component {
           }}
         >
             <TouchableHighlight
-                  onPress={() =>  this.setState({city:'Санкт-Петербург'}, this.hide())}
+                  onPress={() =>  this.setState({city:'Санкт-Петербург'}, this.hide(), this.getRestaurants())}
                   style={{backgroundColor:'#ff5a00', marginVertical: 10, height: windowHeight/20, width:windowWidth, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end',alignItems:'center', justifyContent:'center' }}
                 >   
                     <Text style = {{fontSize: 15, color: "#fff"}}>Санкт-Петербург</Text>
@@ -73,30 +75,45 @@ export default class DododScreen extends Component {
           
         </View>
       );
-      getRestaurants(city){
-        const url_food = "http://95.181.230.223:5000/dodo/restaurants/" + city
-        fetch(url_food)
-        .then((response) => response.json())
-        .then((responseJson) => {
-        this.setState({
-            isLoading: false,
-            dataRestaurant:responseJson
-        });
-      
 
-        })
-        .catch((error) =>{
-        console.error(error);
       
-        })
+      getRestaurants(){
+
+        const url_rest = "http://95.181.230.223:5000/dodo/restaurants/" + this.state.city
+        console.log(url_rest)
+
         return(
-        <FlatList showsHorizontalScrollIndicator={false}
-        centerContent={true}
-        horizontal={true}
-        data={this.state.dataRestaurant}
-        renderItem={({ item }) => this.renderRestaurantList(item)}
-        keyExtractor = { (item,index) => index.toString() }
-/>)
+          fetch(url_rest)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          this.setState({
+              isLoading: false,
+              dataRestaurant:responseJson
+          });
+          console.log(this.state.dataRestaurant)
+        
+  
+          })
+          .catch((error) =>{
+          console.error(error);
+        
+          })
+        );
+      }
+
+
+      _renderRestautants(item){
+        return(
+        <View>
+      <TouchableHighlight
+        onPress={() =>  [this.props.navigation.navigate('Додо Пицца Заказ'),AsyncStorage.setItem('Restaurant', item.name), AsyncStorage.setItem('City', this.state.city)] }
+        style={{backgroundColor:'#212021', marginVertical: 10, height: windowHeight/20, width:windowWidth/1.2, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end', alignItems:'center', justifyContent:'center' }}
+      >   
+
+        <Text style = {{fontSize: 15, color: "#fff"}}>{item.name}</Text>
+      </TouchableHighlight>
+      </View>
+      );
       }
     render(){
         
@@ -116,15 +133,14 @@ export default class DododScreen extends Component {
                     </View>
                 </TouchableHighlight>
                 </View>
-                <View style={{alignItems:'center'}}>
+                <View style={{alignItems:'center', marginVertical: 20}}>
                     <Text style={{fontSize: 20}}>Выберите ресторан</Text>
-                    <TouchableHighlight
-                  onPress={() =>  [this.props.navigation.navigate('Додо Пицца Заказ'),AsyncStorage.setItem('Restaurant', '1'), AsyncStorage.setItem('City', this.state.city)] }
-                  style={{backgroundColor:'#212021', marginVertical: 10, height: windowHeight/20, width:windowWidth/1.2, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end', alignItems:'center', justifyContent:'center' }}
-                >   
-
-                    <Text style = {{fontSize: 15, color: "#fff"}}>Большой проспект П.С., 33</Text>
-            </TouchableHighlight>
+                    <FlatList showsVerticalScrollIndicator={false}
+                      data={this.state.dataRestaurant}
+                      renderItem={({ item }) => this._renderRestautants(item)}
+                      keyExtractor = { (item,index) => index.toString() }
+                      style = {{height:windowHeight/1.3}}
+                    />
                 </View>
               </View>
               <BottomSheet

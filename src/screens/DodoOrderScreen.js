@@ -35,9 +35,43 @@ export default class DodoOrderScrenn extends Component {
         
         this.state = {
         order:'',
+        dataOrder:[]
         
       
         }
+    }
+    
+    sendOrder(){
+        const url_order = "http://95.181.230.223:5000/makeorder/" + this.state.order
+        console.log(url_order)
+
+        return(
+          fetch(url_order)
+          .then((response) => response.text())
+          .then((responseJson) => {
+            if (responseJson == 'no order found') {
+                alert('Извините, такого заказа не существует')
+            }
+            else{
+                this.setState({
+                isLoading: false,
+                dataOrder:responseJson
+                });
+                try {
+                    AsyncStorage.setItem('order', this.state.order.toString())
+                } catch (error) {
+                    console.log(error)
+                }
+                
+                this.props.navigation.navigate('Додо Пицца QR')
+            }
+  
+          })
+          .catch((error) =>{
+          console.error(error);
+        
+          })
+        );
     }
 
     render(){
@@ -59,7 +93,7 @@ export default class DodoOrderScrenn extends Component {
                         </TextInput>
                     </View>
                     <TouchableHighlight
-                        onPress={() =>  [this.props.navigation.navigate('Додо Пицца QR'),AsyncStorage.setItem('order', this.state.order)] }
+                        onPress={() =>  this.sendOrder() }
                         style={{backgroundColor:'#212021', marginVertical: 10, height: windowHeight/20, width:windowWidth/1.2, borderRadius: 10, paddingVertical: 3, paddingHorizontal:5,  alignSelf:'flex-end', alignItems:'center', justifyContent:'center' }}
                     >   
 
